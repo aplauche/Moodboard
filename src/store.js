@@ -13,12 +13,14 @@ function GlobalContextProvider(props) {
   const initialState = {
     flash: [],
     user: null,
+    loadingUser: true,
   };
 
   const reducer = (draft, action) => {
     switch (action.type) {
       case "setUser":
         draft.user = action.user;
+        draft.loadingUser = false;
         break;
       case "logout":
         draft.user = null;

@@ -5,7 +5,12 @@ function Layout({ children }) {
   return (
     <>
       <Header></Header>
-      {children}
+      <div
+        className="main"
+        style={{ margin: "0 auto", width: "90%", padding: "50px 20px" }}
+      >
+        {children}
+      </div>
     </>
   );
 }

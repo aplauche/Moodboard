@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import styled from "@emotion/styled";
 import Button from "@material-ui/core/Button";
 import { auth } from "../firebase";
+import { NavLink, Link } from "react-router-dom";
 
 const HeaderDiv = styled("header")`
   width: 100%;
@@ -36,10 +37,12 @@ function Header() {
 
   return (
     <HeaderDiv>
-      <div className="logo">MOODBOARD</div>
+      <Link to="/" className="logo">
+        MOODBOARD
+      </Link>
       <div className="nav">
-        <a href="">Explore</a>
-        <a href="">Boards</a>
+        <NavLink to="/explore">Explore</NavLink>
+        <NavLink to="/boards">Boards</NavLink>
         <Button onClick={handleSignOut}>Sign Out</Button>
       </div>
     </HeaderDiv>

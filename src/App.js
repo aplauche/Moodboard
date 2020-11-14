@@ -1,13 +1,14 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useState } from "react";
 
-import Login from "./components/Login";
-import Header from "./components/Header";
 import HomeLoggedOut from "./pages/HomeLoggedOut";
 import Layout from "./pages/Layout";
 import HomeLoggedIn from "./pages/HomeLoggedIn";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { Context } from "./store";
 import { auth } from "./firebase";
+import MyBoards from "./pages/MyBoards";
+import Explore from "./pages/Explore";
+import SingleBoard from "./pages/SingleBoard";
 
 function App() {
   const { appState, appDispatch } = useContext(Context);
@@ -24,23 +25,48 @@ function App() {
     return () => {
       unsubscribe();
     };
-  }, [appState.user]);
+  }, []);
+
+  if (appState.loadingUser) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        Loading...
+      </div>
+    );
+  }
 
   return (
     <BrowserRouter>
       <Switch>
-        {appState.user ? (
+        {!appState.user ? (
+          <Route path="/">
+            <HomeLoggedOut />
+          </Route>
+        ) : (
           <Route path="/" exact>
             <Layout>
               <HomeLoggedIn />
             </Layout>
           </Route>
-        ) : (
-          <Route path="/" exact>
-            <HomeLoggedOut />
-          </Route>
         )}
-        <Layout></Layout>
+        <Layout>
+          <Route exact path="/boards">
+            <MyBoards />
+          </Route>
+          <Route path="/boards/:id">
+            <SingleBoard />
+          </Route>
+          <Route path="/explore">
+            <Explore />
+          </Route>
+        </Layout>
       </Switch>
     </BrowserRouter>
   );
