@@ -1,21 +1,38 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useContext } from "react";
 
 import { Link } from "react-router-dom";
 import Board from "../components/Board";
 import BoardsGrid from "../components/BoardsGrid";
+import { db } from "../firebase";
+
+import { Context } from "../store";
 
 function Explore() {
-  const boardInfo = {
-    image: "#",
-    title: "Sample Board",
-    createdBy: "Other People",
-  };
+  const { appState, appDispatch } = useContext(Context);
+
+  const [boards, setBoards] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    db.collection("boards").onSnapshot((snapshot) => {
+      setBoards(
+        snapshot.docs.map((doc) => {
+          return doc.data();
+        })
+      );
+    });
+    setLoading(false);
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <BoardsGrid>
-      <Board boardInfo={boardInfo} />
-      <Board boardInfo={boardInfo} />
-      <Board boardInfo={boardInfo} />
+      {boards.map((board, index) => {
+        return <Board key={index} boardInfo={board} />;
+      })}
     </BoardsGrid>
   );
 }

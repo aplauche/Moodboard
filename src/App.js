@@ -17,6 +17,7 @@ function App() {
     const unsubscribe = auth.onAuthStateChanged((authUser) => {
       if (authUser) {
         appDispatch({ type: "setUser", user: authUser });
+        console.log(authUser);
       } else {
         appDispatch({ type: "logout" });
       }
