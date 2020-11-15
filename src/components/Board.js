@@ -27,9 +27,9 @@ const BoardDiv = styled(Link)`
   }
 `;
 
-function Board({ boardInfo }) {
+function Board({ boardInfo, id }) {
   return (
-    <BoardDiv to="/boards/1234">
+    <BoardDiv to={"/boards/" + id}>
       <img src={boardInfo.image} alt="" />
       <div className="info">
         <p className="board-title">{boardInfo.title}</p>

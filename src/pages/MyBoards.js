@@ -18,11 +18,14 @@ function MyBoards() {
     db.collection("boards")
       .where("createdById", "==", appState.user.uid)
       .onSnapshot((snapshot) => {
-        let newBoards = [];
-        snapshot.forEach((doc) => {
-          newBoards.push(doc.data());
-        });
-        setBoards(newBoards);
+        setBoards(
+          snapshot.docs.map((doc) => {
+            return {
+              id: doc.id,
+              data: doc.data(),
+            };
+          })
+        );
       });
     setLoading(false);
   }, []);
@@ -35,8 +38,8 @@ function MyBoards() {
     <>
       <CreateBoardModal />
       <BoardsGrid>
-        {boards.map((board, index) => {
-          return <Board key={index} boardInfo={board} />;
+        {boards.map((board) => {
+          return <Board key={board.id} id={board.id} boardInfo={board.data} />;
         })}
       </BoardsGrid>
     </>

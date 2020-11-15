@@ -17,7 +17,10 @@ function Explore() {
     db.collection("boards").onSnapshot((snapshot) => {
       setBoards(
         snapshot.docs.map((doc) => {
-          return doc.data();
+          return {
+            id: doc.id,
+            data: doc.data(),
+          };
         })
       );
     });
@@ -30,8 +33,8 @@ function Explore() {
 
   return (
     <BoardsGrid>
-      {boards.map((board, index) => {
-        return <Board key={index} boardInfo={board} />;
+      {boards.map((board) => {
+        return <Board key={board.id} id={board.id} boardInfo={board.data} />;
       })}
     </BoardsGrid>
   );
