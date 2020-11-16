@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import { Context } from "../store";
 import { db } from "../firebase";
 import firebase from "firebase";
@@ -27,6 +27,14 @@ const CreateBoardForm = styled("div")`
   & input {
     margin-bottom: 10px;
   }
+
+  & img {
+    max-width: 100%;
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    margin-bottom: 20px;
+  }
 `;
 
 function CreateBoardModal() {
@@ -35,6 +43,30 @@ function CreateBoardModal() {
   const [title, setTitle] = useState("");
   const [image, setImage] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
+  const [uploading, setUploading] = useState(false);
+
+  const fileInput = useRef();
+
+  const handlePhotoSelected = (e) => {
+    setUploading(true);
+    let cloudURL = "https://api.Cloudinary.com/v1_1/fsdm/image/upload";
+    const formData = new FormData();
+    formData.append("file", fileInput.current.files[0]);
+    formData.append("upload_preset", "openupload");
+
+    const options = {
+      method: "POST",
+      body: formData,
+    };
+
+    fetch(cloudURL, options)
+      .then((res) => res.json())
+      .then((data) => {
+        setImage(data.url);
+        setUploading(false);
+      })
+      .catch((err) => console.log(err));
+  };
 
   const handleCreate = (e) => {
     e.preventDefault();
@@ -56,6 +88,23 @@ function CreateBoardModal() {
 
   const handleClose = () => {
     setModalOpen(false);
+  };
+
+  const FileUpload = () => {
+    return (
+      <>
+        {image == "" ? (
+          <input
+            id="image-upload"
+            onChange={handlePhotoSelected}
+            ref={fileInput}
+            type="file"
+          />
+        ) : (
+          <img src={image} alt="" />
+        )}
+      </>
+    );
   };
 
   return (
@@ -80,6 +129,10 @@ function CreateBoardModal() {
               value={title}
               type="text"
             />
+            <label htmlFor="image-upload">Cover Photo</label>
+
+            {uploading ? <div>Uploading...</div> : <FileUpload />}
+
             <button type="submit">Submit</button>
           </form>
         </CreateBoardForm>
