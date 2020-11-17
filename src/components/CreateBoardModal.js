@@ -3,17 +3,19 @@ import { Context } from "../store";
 import { db } from "../firebase";
 import firebase from "firebase";
 import Modal from "@material-ui/core/Modal";
+import Chip from "@material-ui/core/Chip";
 import styled from "@emotion/styled";
 
 const CreateBoardForm = styled("div")`
   padding: 50px;
   background: white;
   border-radius: 10px;
-
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   position: fixed;
+  max-width: 600px
+  width: 90vw;
 
   & h2 {
     margin-bottom: 20px;
@@ -24,8 +26,15 @@ const CreateBoardForm = styled("div")`
     flex-direction: column;
   }
 
-  & input {
+  & input,
+  textarea {
     margin-bottom: 10px;
+  }
+
+  & .tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
   }
 
   & img {
@@ -41,7 +50,11 @@ function CreateBoardModal() {
   const { appState, appDispatch } = useContext(Context);
 
   const [title, setTitle] = useState("");
+  const [imageInput, setImageInput] = useState("");
   const [image, setImage] = useState("");
+  const [tags, setTags] = useState([]);
+  const [tagInput, setTagInput] = useState("");
+  const [description, setDescription] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [uploading, setUploading] = useState(false);
 
@@ -73,12 +86,19 @@ function CreateBoardModal() {
 
     db.collection("boards").add({
       title: title,
+      description: description,
+      tags: tags,
       image: image,
       createdBy: appState.user.displayName,
       createdById: appState.user.uid,
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
       ownerIds: [appState.user.uid],
     });
+    setTags([]);
+    setTagInput("");
+    setTitle("");
+    setDescription("");
+    setImage("");
     handleClose();
   };
 
@@ -89,6 +109,8 @@ function CreateBoardModal() {
   const handleClose = () => {
     setModalOpen(false);
   };
+
+  const handleChipDelete = () => {};
 
   const FileUpload = () => {
     return (
@@ -119,8 +141,11 @@ function CreateBoardModal() {
         <CreateBoardForm>
           <h2>Create A Board</h2>
           <form onSubmit={handleCreate}>
+            <label htmlFor="image-upload">Cover Photo</label>
+            {uploading ? <div>Uploading...</div> : <FileUpload />}
             <label htmlFor="title">Board Name:</label>
             <input
+              required={true}
               id="title"
               name="title"
               onChange={(e) => {
@@ -129,11 +154,48 @@ function CreateBoardModal() {
               value={title}
               type="text"
             />
-            <label htmlFor="image-upload">Cover Photo</label>
+            <label htmlFor="description">Board Description:</label>
+            <textarea
+              id="description"
+              name="description"
+              rows="8"
+              onChange={(e) => {
+                setDescription(e.target.value);
+              }}
+              value={description}
+              type="text"
+            ></textarea>
 
-            {uploading ? <div>Uploading...</div> : <FileUpload />}
+            <label htmlFor="tags">Tags:</label>
+            <input
+              id="tags"
+              name="tags"
+              onChange={(e) => {
+                setTagInput(e.target.value);
+              }}
+              onKeyDown={(e) => {
+                if (e.keyCode == 188) {
+                  e.preventDefault();
+                  setTags([...tags, e.target.value]);
+                  setTagInput("");
+                }
+              }}
+              value={tagInput}
+              type="text"
+            />
 
-            <button type="submit">Submit</button>
+            <div className="tags">
+              {tags.length > 0 &&
+                tags.map((tag, index) => {
+                  return (
+                    <Chip label={tag} key={index} onDelete={handleChipDelete} />
+                  );
+                })}
+            </div>
+
+            <button style={{ marginTop: "20px" }} type="submit">
+              Submit
+            </button>
           </form>
         </CreateBoardForm>
       </Modal>

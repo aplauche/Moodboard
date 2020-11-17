@@ -24,6 +24,7 @@ function GlobalContextProvider(props) {
         break;
       case "logout":
         draft.user = null;
+        draft.loadingUser = false;
         break;
       case "flash":
         draft.flash.push(action.value);
