@@ -5,6 +5,7 @@ import firebase from "firebase";
 import Modal from "@material-ui/core/Modal";
 import Chip from "@material-ui/core/Chip";
 import styled from "@emotion/styled";
+import { useParams } from "react-router-dom";
 
 const CreateBoardForm = styled("div")`
   padding: 50px;
@@ -46,15 +47,14 @@ const CreateBoardForm = styled("div")`
   }
 `;
 
-function CreateBoardModal() {
+function CreatePostModal() {
   const { appState, appDispatch } = useContext(Context);
+  const { id } = useParams();
 
   const [mounted, setMounted] = useState(false);
   const [title, setTitle] = useState("");
   const [imageInput, setImageInput] = useState("");
   const [image, setImage] = useState("");
-  const [tags, setTags] = useState([]);
-  const [tagInput, setTagInput] = useState("");
   const [description, setDescription] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -87,18 +87,14 @@ function CreateBoardModal() {
   const handleCreate = (e) => {
     e.preventDefault();
 
-    db.collection("boards").add({
+    db.collection("boards").doc(id).collection("posts").add({
       title: title,
       description: description,
-      tags: tags,
       image: image,
       createdBy: appState.user.displayName,
       createdById: appState.user.uid,
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-      ownerIds: [appState.user.uid],
     });
-    setTags([]);
-    setTagInput("");
     setTitle("");
     setDescription("");
     setImage("");
@@ -107,6 +103,7 @@ function CreateBoardModal() {
 
   useEffect(() => {
     setMounted(true);
+    console.log(id);
     return () => setMounted(false);
   }, []);
 
@@ -116,10 +113,6 @@ function CreateBoardModal() {
 
   const handleClose = () => {
     setModalOpen(false);
-  };
-
-  const handleChipDelete = (deletedIndex) => {
-    setTags(tags.filter((tag, index) => index !== deletedIndex));
   };
 
   const FileUpload = () => {
@@ -145,15 +138,15 @@ function CreateBoardModal() {
         style={{ marginBottom: "20px", textAlign: "right" }}
         onClick={handleOpen}
       >
-        Add Board
+        Add
       </button>
       <Modal open={modalOpen} onClose={handleClose}>
         <CreateBoardForm>
-          <h2>Create A Board</h2>
+          <h2>Create A Post</h2>
           <form onSubmit={handleCreate}>
-            <label htmlFor="image-upload">Cover Photo</label>
+            <label htmlFor="image-upload">Photo</label>
             {uploading ? <div>Uploading...</div> : <FileUpload />}
-            <label htmlFor="title">Board Name:</label>
+            <label htmlFor="title">Title</label>
             <input
               required={true}
               id="title"
@@ -164,7 +157,7 @@ function CreateBoardModal() {
               value={title}
               type="text"
             />
-            <label htmlFor="description">Board Description:</label>
+            <label htmlFor="description">Description:</label>
             <textarea
               id="description"
               name="description"
@@ -176,39 +169,6 @@ function CreateBoardModal() {
               type="text"
             ></textarea>
 
-            <label htmlFor="tags">Tags:</label>
-            <input
-              id="tags"
-              name="tags"
-              onChange={(e) => {
-                setTagInput(e.target.value);
-              }}
-              onKeyDown={(e) => {
-                if (e.keyCode == 188) {
-                  e.preventDefault();
-                  setTags([...tags, e.target.value]);
-                  setTagInput("");
-                }
-              }}
-              value={tagInput}
-              type="text"
-            />
-
-            <div className="tags">
-              {tags.length > 0 &&
-                tags.map((tag, index) => {
-                  return (
-                    <Chip
-                      label={tag}
-                      key={index}
-                      onDelete={() => {
-                        handleChipDelete(index);
-                      }}
-                    />
-                  );
-                })}
-            </div>
-
             <button style={{ marginTop: "20px" }} type="submit">
               Submit
             </button>
@@ -219,4 +179,4 @@ function CreateBoardModal() {
   );
 }
 
-export default CreateBoardModal;
+export default CreatePostModal;
