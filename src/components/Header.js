@@ -6,16 +6,20 @@ import { NavLink, Link } from "react-router-dom";
 
 const HeaderDiv = styled("header")`
   width: 100%;
-  padding: 20px;
+  padding: 16px 20px;
   background: white;
   border-bottom: 1px solid black;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background: #212529;
 
   & .logo {
     font-weight: 700;
-    text-transform: uppercase;
+    font-size: 32px;
+    color: #b2c3ff;
+    text-decoration: none;
+    font-family: "Damion", cursive;
   }
 
   & .nav {
@@ -27,6 +31,8 @@ const HeaderDiv = styled("header")`
   & .nav a {
     display: block;
     padding: 0px 40px;
+    color: white;
+    text-decoration: none;
   }
 `;
 
@@ -38,12 +44,14 @@ function Header() {
   return (
     <HeaderDiv>
       <Link to="/" className="logo">
-        MOODBOARD
+        Moodz
       </Link>
       <div className="nav">
         <NavLink to="/explore">Explore</NavLink>
         <NavLink to="/boards">Boards</NavLink>
-        <Button onClick={handleSignOut}>Sign Out</Button>
+        <Button style={{ color: "white" }} onClick={handleSignOut}>
+          Sign Out
+        </Button>
       </div>
     </HeaderDiv>
   );

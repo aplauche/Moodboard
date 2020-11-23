@@ -8,7 +8,7 @@ import styled from "@emotion/styled";
 
 const CreateBoardForm = styled("div")`
   padding: 50px;
-  background: white;
+  background: #212529;
   border-radius: 10px;
   top: 50%;
   left: 50%;
@@ -16,6 +16,10 @@ const CreateBoardForm = styled("div")`
   position: fixed;
   max-width: 600px
   width: 90vw;
+
+  &:focus {
+    outline: none;
+  }
 
   & h2 {
     margin-bottom: 20px;
@@ -78,8 +82,8 @@ function CreateBoardModal() {
       .then((data) => {
         if (mounted) {
           setImage(data.url);
+          setUploading(false);
         }
-        setUploading(false);
       })
       .catch((err) => console.log(err));
   };
@@ -203,6 +207,9 @@ function CreateBoardModal() {
                       key={index}
                       onDelete={() => {
                         handleChipDelete(index);
+                      }}
+                      style={{
+                        background: "linear-gradient(45deg,#e0c3fc, #8ec5fc)",
                       }}
                     />
                   );

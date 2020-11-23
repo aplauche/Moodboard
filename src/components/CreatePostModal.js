@@ -9,7 +9,7 @@ import { useParams } from "react-router-dom";
 
 const CreateBoardForm = styled("div")`
   padding: 50px;
-  background: white;
+  background: #212529;
   border-radius: 10px;
   top: 50%;
   left: 50%;
@@ -17,6 +17,10 @@ const CreateBoardForm = styled("div")`
   position: fixed;
   max-width: 600px
   width: 90vw;
+
+  &:focus {
+    outline: none;
+  }
 
   & h2 {
     margin-bottom: 20px;
@@ -53,6 +57,7 @@ function CreatePostModal() {
 
   const [mounted, setMounted] = useState(false);
   const [title, setTitle] = useState("");
+  const [url, setUrl] = useState("");
   const [imageInput, setImageInput] = useState("");
   const [image, setImage] = useState("");
   const [description, setDescription] = useState("");
@@ -78,8 +83,8 @@ function CreatePostModal() {
       .then((data) => {
         if (mounted) {
           setImage(data.url);
+          setUploading(false);
         }
-        setUploading(false);
       })
       .catch((err) => console.log(err));
   };
@@ -157,6 +162,7 @@ function CreatePostModal() {
               value={title}
               type="text"
             />
+
             <label htmlFor="description">Description:</label>
             <textarea
               id="description"
@@ -168,6 +174,18 @@ function CreatePostModal() {
               value={description}
               type="text"
             ></textarea>
+
+            <label htmlFor="url">Link To:</label>
+            <input
+              required={true}
+              id="url"
+              name="url"
+              onChange={(e) => {
+                setUrl(e.target.value);
+              }}
+              value={url}
+              type="text"
+            />
 
             <button style={{ marginTop: "20px" }} type="submit">
               Submit

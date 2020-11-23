@@ -12,6 +12,7 @@ const ToolbarDiv = styled("div")`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 32px;
+  background: #212529;
 
   & button {
     margin: 4px;
