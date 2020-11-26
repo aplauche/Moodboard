@@ -85,29 +85,33 @@ function CreateBoardModal() {
     setImage(image);
   };
 
-  const handleCreate = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    db.collection("boards").add({
-      title: title,
-      description: description,
-      tags: tags,
-      image: image,
-      createdBy: appState.user.displayName,
-      createdById: appState.user.uid,
-      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-      ownerIds: [appState.user.uid],
-    });
-    setTags([]);
-    setTagInput("");
-    setTitle("");
-    setDescription("");
-    setImage("");
+    if (editMode) {
+    } else {
+      db.collection("boards").add({
+        title: title,
+        description: description,
+        tags: tags,
+        image: image,
+        createdBy: appState.user.displayName,
+        createdById: appState.user.uid,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        ownerIds: [appState.user.uid],
+      });
+    }
+
     handleClose();
   };
 
   const handleClose = () => {
     appDispatch({ type: "closeBoardFormModal" });
+    setTags([]);
+    setTagInput("");
+    setTitle("");
+    setDescription("");
+    setImage("");
   };
 
   const handleChipDelete = (deletedIndex) => {
@@ -117,8 +121,8 @@ function CreateBoardModal() {
   return (
     <Modal open={appState.boardFormModal.isOpen} onClose={handleClose}>
       <CreateBoardForm>
-        <h2>Create A Board</h2>
-        <form onSubmit={handleCreate}>
+        <h2>{editMode ? "Edit Board" : "Create Board"}</h2>
+        <form onSubmit={handleSubmit}>
           <ImageUpload currentImage={image} handleUpload={handleUpload} />
           <label htmlFor="title">Board Name:</label>
           <input
@@ -179,9 +183,15 @@ function CreateBoardModal() {
               })}
           </div>
 
-          <button style={{ marginTop: "20px" }} type="submit">
-            Submit
-          </button>
+          {editMode ? (
+            <button style={{ marginTop: "20px" }} type="submit">
+              Update Board
+            </button>
+          ) : (
+            <button style={{ marginTop: "20px" }} type="submit">
+              Create Board
+            </button>
+          )}
         </form>
       </CreateBoardForm>
     </Modal>
