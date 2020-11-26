@@ -15,7 +15,7 @@ const CreateBoardForm = styled("div")`
   left: 50%;
   transform: translate(-50%, -50%);
   position: fixed;
-  max-width: 600px
+  max-width: 600px;
   width: 90vw;
 
   &:focus {
@@ -53,13 +53,33 @@ const CreateBoardForm = styled("div")`
 
 function CreateBoardModal() {
   const { appState, appDispatch } = useContext(Context);
-
   const [title, setTitle] = useState("");
   const [image, setImage] = useState("");
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState("");
   const [description, setDescription] = useState("");
-  const [uploading, setUploading] = useState(false);
+
+  const editMode = appState.boardFormModal.prepopulate ? true : false;
+
+  useEffect(() => {
+    if (appState.boardFormModal.prepopulate == null) {
+      return;
+    }
+
+    const getFormData = async () => {
+      const snapshot = await db
+        .collection("boards")
+        .doc(appState.boardFormModal.prepopulate)
+        .get();
+      const data = snapshot.data();
+      setTags(data.tags);
+      setTagInput("");
+      setTitle(data.title);
+      setDescription(data.description);
+      setImage(data.image);
+    };
+    getFormData();
+  }, [appState.boardFormModal.prepopulate]);
 
   const handleUpload = (image) => {
     setImage(image);

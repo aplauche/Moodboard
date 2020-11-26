@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
 import { db } from "../firebase";
+import { Context } from "../store";
 
 const BoardDiv = styled(Link)`
   width: 100%;
@@ -9,22 +10,25 @@ const BoardDiv = styled(Link)`
   position: relative;
   color: #efefef;
   text-decoration: none;
+  background: #212529;
+  border-radius: 10px;
 
   & button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
+    // position: absolute;
+    // top: 10px;
+    // right: 10px;
   }
 
   & img {
     width: 100%;
     height: 250px;
     object-fit: cover;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
   }
 
   & .info {
     padding: 20px 20px 40px 20px;
-    background: #212529;
   }
 
   & .board-title {
@@ -40,19 +44,21 @@ const BoardDiv = styled(Link)`
   }
 `;
 
-const deleteBoard = (id) => {
-  db.collection("boards")
-    .doc(id)
-    .delete()
-    .then(() => {
-      console.log("deleted");
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-};
-
 function Board({ boardInfo, id }) {
+  const { appState, appDispatch } = useContext(Context);
+
+  const deleteBoard = (id) => {
+    db.collection("boards")
+      .doc(id)
+      .delete()
+      .then(() => {
+        console.log("deleted");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <BoardDiv to={"/boards/" + id}>
       <button
@@ -63,6 +69,15 @@ function Board({ boardInfo, id }) {
         }}
       >
         Delete
+      </button>
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          appDispatch({ type: "openBoardFormModal", data: id });
+        }}
+      >
+        Edit
       </button>
       <img src={boardInfo.image} alt="" />
       <div className="info">
