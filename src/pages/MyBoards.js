@@ -37,6 +37,13 @@ function MyBoards() {
   return (
     <>
       <CreateBoardModal />
+      <button
+        onClick={() => {
+          appDispatch({ type: "openBoardFormModal" });
+        }}
+      >
+        Add Board
+      </button>
       <BoardsGrid>
         {boards.map((board) => {
           return <Board key={board.id} id={board.id} boardInfo={board.data} />;

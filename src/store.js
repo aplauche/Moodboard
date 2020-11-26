@@ -14,6 +14,14 @@ function GlobalContextProvider(props) {
     flash: [],
     user: null,
     loadingUser: true,
+    postFormModal: {
+      isOpen: false,
+      prepopulate: null,
+    },
+    boardFormModal: {
+      isOpen: false,
+      prepopulate: null,
+    },
   };
 
   const reducer = (draft, action) => {
@@ -28,6 +36,22 @@ function GlobalContextProvider(props) {
         break;
       case "flash":
         draft.flash.push(action.value);
+        break;
+      case "openBoardFormModal":
+        draft.boardFormModal.prepopulate = action.data;
+        draft.boardFormModal.isOpen = true;
+        break;
+      case "closeBoardFormModal":
+        draft.boardFormModal.prepopulate = null;
+        draft.boardFormModal.isOpen = false;
+        break;
+      case "openPostFormModal":
+        draft.postFormModal.prepopulate = action.data;
+        draft.postFormModal.isOpen = true;
+        break;
+      case "closePostFormModal":
+        draft.postFormModal.prepopulate = null;
+        draft.postFormModal.isOpen = false;
         break;
     }
   };
