@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
 import { db } from "../firebase";
 import { useParams } from "react-router-dom";
+import { Context } from "../store";
 
 const BoardDiv = styled("div")`
   width: 100%;
@@ -41,6 +42,8 @@ const BoardDiv = styled("div")`
 `;
 
 function PostTeaser({ postInfo, id }) {
+  const { appState, appDispatch } = useContext(Context);
+
   const params = useParams();
 
   const deletePost = () => {
@@ -65,6 +68,15 @@ function PostTeaser({ postInfo, id }) {
         }}
       >
         Delete
+      </button>
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          appDispatch({ type: "openPostFormModal", data: id });
+        }}
+      >
+        Edit
       </button>
       <img src={postInfo.image} alt="" />
       <div className="info">

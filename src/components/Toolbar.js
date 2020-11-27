@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
-import CreatePostModal from "./CreatePostModal";
+import PostFormModal from "./PostFormModal";
+import { Context } from "../store";
 
 const ToolbarDiv = styled("div")`
   width: 100%;
@@ -20,18 +21,31 @@ const ToolbarDiv = styled("div")`
 `;
 
 function Toolbar() {
+  const { appState, appDispatch } = useContext(Context);
+
   return (
-    <ToolbarDiv>
-      <div className="left">
-        <p>4 Columns</p>
-      </div>
-      <div className="right">
-        <CreatePostModal />
-        <button>Titles</button>
-        <button>Comments</button>
-        <button>DarkMode</button>
-      </div>
-    </ToolbarDiv>
+    <>
+      <PostFormModal />
+      <ToolbarDiv>
+        <div className="left">
+          <p>4 Columns</p>
+        </div>
+        <div className="right">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              appDispatch({ type: "openPostFormModal" });
+            }}
+          >
+            Add
+          </button>
+          <button>Titles</button>
+          <button>Comments</button>
+          <button>DarkMode</button>
+        </div>
+      </ToolbarDiv>
+    </>
   );
 }
 

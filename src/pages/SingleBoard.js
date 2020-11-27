@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
 import Toolbar from "../components/Toolbar";
@@ -6,12 +6,17 @@ import { useParams } from "react-router-dom";
 import { db } from "../firebase";
 import BoardsGrid from "../components/BoardsGrid";
 import PostTeaser from "../components/PostTeaser";
+import { Context } from "../store";
 
 function SingleBoard() {
   const { id } = useParams();
 
+  const { appState, appDispatch } = useContext(Context);
+
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const [owner, setOwner] = useState(null);
 
   useEffect(() => {
     let unsubscribe = db
@@ -28,6 +33,13 @@ function SingleBoard() {
           })
         );
       });
+
+    db.collection("boards")
+      .doc(id)
+      .get()
+      .then((doc) => {
+        setOwner(doc.data().createdById);
+      });
     setLoading(false);
 
     return () => {
@@ -35,13 +47,15 @@ function SingleBoard() {
     };
   }, []);
 
+  useEffect(() => {}, []);
+
   if (loading) {
     return <div>Loading...</div>;
   }
 
   return (
     <div>
-      <Toolbar />
+      {owner == appState.user.uid && <Toolbar />}
       <BoardsGrid>
         {posts.map((post) => {
           return <PostTeaser key={post.id} id={post.id} postInfo={post.data} />;

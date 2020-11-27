@@ -61,24 +61,28 @@ function Board({ boardInfo, id }) {
 
   return (
     <BoardDiv to={"/boards/" + id}>
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          e.preventDefault();
-          deleteBoard(id);
-        }}
-      >
-        Delete
-      </button>
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          e.preventDefault();
-          appDispatch({ type: "openBoardFormModal", data: id });
-        }}
-      >
-        Edit
-      </button>
+      {boardInfo.createdById == appState.user.uid && (
+        <>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              deleteBoard(id);
+            }}
+          >
+            Delete
+          </button>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              appDispatch({ type: "openBoardFormModal", data: id });
+            }}
+          >
+            Edit
+          </button>
+        </>
+      )}
       <img src={boardInfo.image} alt="" />
       <div className="info">
         <p className="board-title">{boardInfo.title}</p>

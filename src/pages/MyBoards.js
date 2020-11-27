@@ -3,7 +3,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import Board from "../components/Board";
 import BoardsGrid from "../components/BoardsGrid";
-import CreateBoardModal from "../components/CreateBoardModal";
+import BoardFormModal from "../components/BoardFormModal";
 import { db } from "../firebase";
 
 import { Context } from "../store";
@@ -36,7 +36,7 @@ function MyBoards() {
 
   return (
     <>
-      <CreateBoardModal />
+      <BoardFormModal />
       <button
         onClick={() => {
           appDispatch({ type: "openBoardFormModal" });
