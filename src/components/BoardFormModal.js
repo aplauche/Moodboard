@@ -4,6 +4,9 @@ import { db } from "../firebase";
 import firebase from "firebase";
 import Modal from "@material-ui/core/Modal";
 import Chip from "@material-ui/core/Chip";
+import Switch from "@material-ui/core/Switch";
+import FormGroup from "@material-ui/core/FormGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import styled from "@emotion/styled";
 import ImageUpload from "./ImageUpload";
 
@@ -58,6 +61,7 @@ function CreateBoardModal() {
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState("");
   const [description, setDescription] = useState("");
+  const [isPublic, setIsPublic] = useState(false);
 
   const editMode = appState.boardFormModal.prepopulate ? true : false;
 
@@ -77,6 +81,7 @@ function CreateBoardModal() {
       setTitle(data.title);
       setDescription(data.description);
       setImage(data.image);
+      setIsPublic(data.isPublic || false);
     };
     getFormData();
   }, [appState.boardFormModal.prepopulate]);
@@ -85,16 +90,27 @@ function CreateBoardModal() {
     setImage(image);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (editMode) {
+    if (appState.boardFormModal.prepopulate != null) {
+      await db
+        .collection("boards")
+        .doc(appState.boardFormModal.prepopulate)
+        .update({
+          title: title,
+          description: description,
+          tags: tags,
+          image: image,
+          isPublic: isPublic,
+        });
     } else {
-      db.collection("boards").add({
+      await db.collection("boards").add({
         title: title,
         description: description,
         tags: tags,
         image: image,
+        isPublic: isPublic,
         createdBy: appState.user.displayName,
         createdById: appState.user.uid,
         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
@@ -112,6 +128,7 @@ function CreateBoardModal() {
     setTitle("");
     setDescription("");
     setImage("");
+    setIsPublic(false);
   };
 
   const handleChipDelete = (deletedIndex) => {
@@ -182,6 +199,18 @@ function CreateBoardModal() {
                 );
               })}
           </div>
+
+          <FormGroup>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={isPublic}
+                  onChange={(e) => setIsPublic(!isPublic)}
+                />
+              }
+              label="Public?"
+            />
+          </FormGroup>
 
           {editMode ? (
             <button style={{ marginTop: "20px" }} type="submit">

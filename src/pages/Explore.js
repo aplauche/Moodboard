@@ -14,16 +14,18 @@ function Explore() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    db.collection("boards").onSnapshot((snapshot) => {
-      setBoards(
-        snapshot.docs.map((doc) => {
-          return {
-            id: doc.id,
-            data: doc.data(),
-          };
-        })
-      );
-    });
+    db.collection("boards")
+      .where("isPublic", "==", true)
+      .onSnapshot((snapshot) => {
+        setBoards(
+          snapshot.docs.map((doc) => {
+            return {
+              id: doc.id,
+              data: doc.data(),
+            };
+          })
+        );
+      });
     setLoading(false);
   }, []);
 

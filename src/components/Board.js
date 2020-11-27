@@ -34,13 +34,13 @@ const BoardDiv = styled(Link)`
   & .board-title {
     font-size: 1.4rem;
     font-family: "Playfair Display", serif;
-    font-size: 1.75rem;
     margin-bottom: 10px;
   }
 
   & .username {
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     font-weight: 700;
+    margin-bottom: 32px;
   }
 `;
 
@@ -61,32 +61,32 @@ function Board({ boardInfo, id }) {
 
   return (
     <BoardDiv to={"/boards/" + id}>
-      {boardInfo.createdById == appState.user.uid && (
-        <>
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              deleteBoard(id);
-            }}
-          >
-            Delete
-          </button>
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              appDispatch({ type: "openBoardFormModal", data: id });
-            }}
-          >
-            Edit
-          </button>
-        </>
-      )}
       <img src={boardInfo.image} alt="" />
       <div className="info">
         <p className="board-title">{boardInfo.title}</p>
         <p className="username">{boardInfo.createdBy}</p>
+        {boardInfo.createdById == appState.user.uid && (
+          <>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                appDispatch({ type: "openBoardFormModal", data: id });
+              }}
+            >
+              Edit
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                deleteBoard(id);
+              }}
+            >
+              Delete
+            </button>
+          </>
+        )}
       </div>
     </BoardDiv>
   );

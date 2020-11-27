@@ -62,6 +62,8 @@ function CreatePostModal() {
   const [image, setImage] = useState("");
   const [description, setDescription] = useState("");
 
+  const editMode = appState.postFormModal.prepopulate ? true : false;
+
   const fileInput = useRef();
 
   useEffect(() => {
@@ -88,15 +90,28 @@ function CreatePostModal() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    db.collection("boards").doc(id).collection("posts").add({
-      title: title,
-      description: description,
-      image: image,
-      url: url,
-      createdBy: appState.user.displayName,
-      createdById: appState.user.uid,
-      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-    });
+    if (appState.postFormModal.prepopulate != null) {
+      db.collection("boards")
+        .doc(id)
+        .collection("posts")
+        .doc(appState.postFormModal.prepopulate)
+        .update({
+          title: title,
+          description: description,
+          image: image,
+          url: url,
+        });
+    } else {
+      db.collection("boards").doc(id).collection("posts").add({
+        title: title,
+        description: description,
+        image: image,
+        url: url,
+        createdBy: appState.user.displayName,
+        createdById: appState.user.uid,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+    }
 
     handleClose();
   };
@@ -148,9 +163,8 @@ function CreatePostModal() {
             type="text"
           ></textarea>
 
-          <label htmlFor="url">Link To:</label>
+          <label htmlFor="url">Link To (optional):</label>
           <input
-            required={true}
             id="url"
             name="url"
             onChange={(e) => {
