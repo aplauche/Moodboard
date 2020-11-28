@@ -50,11 +50,13 @@ function App() {
       <Switch>
         {!appState.user ? (
           <Route path="/">
-            <HomeLoggedOut />
+            <Layout isHome={true}>
+              <HomeLoggedOut />
+            </Layout>
           </Route>
         ) : (
           <Route path="/" exact>
-            <Layout>
+            <Layout isHome={true}>
               <HomeLoggedIn />
             </Layout>
           </Route>

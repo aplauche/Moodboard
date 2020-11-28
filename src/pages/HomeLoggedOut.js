@@ -5,18 +5,21 @@ import styled from "@emotion/styled";
 
 function HomeLoggedOut() {
   return (
-    <div
-      style={{
-        width: "100vw",
-        height: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Login />
-      <Register />
-    </div>
+    <>
+      <div
+        style={{
+          width: "100vw",
+          height: "90vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "flex-start",
+          paddingTop: "10vh",
+        }}
+      >
+        <Login />
+        <Register />
+      </div>
+    </>
   );
 }
 

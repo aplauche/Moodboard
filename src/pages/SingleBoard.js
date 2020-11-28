@@ -8,6 +8,7 @@ import BoardsGrid from "../components/BoardsGrid";
 import PostTeaser from "../components/PostTeaser";
 import { Context } from "../store";
 import Loading from "../components/Loading";
+import PostModal from "../components/PostModal";
 
 function SingleBoard() {
   const { id } = useParams();
@@ -54,6 +55,7 @@ function SingleBoard() {
 
   return (
     <div>
+      <PostModal />
       {owner == appState.user.uid && <Toolbar />}
       <BoardsGrid>
         {posts.map((post) => {

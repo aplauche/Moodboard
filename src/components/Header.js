@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import styled from "@emotion/styled";
 import Button from "@material-ui/core/Button";
 import { auth } from "../firebase";
 import { NavLink, Link } from "react-router-dom";
+import { Context } from "../store";
 
 const HeaderDiv = styled("header")`
   width: 100%;
@@ -37,6 +38,8 @@ const HeaderDiv = styled("header")`
 `;
 
 function Header() {
+  const { appState, appDispatch } = useContext(Context);
+
   const handleSignOut = () => {
     auth.signOut();
   };
@@ -47,11 +50,17 @@ function Header() {
         Moodz
       </Link>
       <div className="nav">
-        <NavLink to="/explore">Explore</NavLink>
-        <NavLink to="/boards">Boards</NavLink>
-        <Button style={{ color: "white" }} onClick={handleSignOut}>
-          Sign Out
-        </Button>
+        {!appState.user ? (
+          <></>
+        ) : (
+          <>
+            <NavLink to="/explore">Explore</NavLink>
+            <NavLink to="/boards">Boards</NavLink>
+            <Button style={{ color: "white" }} onClick={handleSignOut}>
+              Sign Out
+            </Button>
+          </>
+        )}
       </div>
     </HeaderDiv>
   );

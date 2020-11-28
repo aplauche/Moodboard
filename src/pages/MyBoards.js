@@ -38,6 +38,7 @@ function MyBoards() {
     <>
       <BoardFormModal />
       <button
+        style={{ textAlign: "right", marginBottom: "32px" }}
         onClick={() => {
           appDispatch({ type: "openBoardFormModal" });
         }}

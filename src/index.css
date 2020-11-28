@@ -21,3 +21,17 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+button,
+.button {
+  color: white;
+  text-decoration: none;
+  text-transform: uppercase;
+  background: linear-gradient(45deg, #e0c3fc, #8ec5fc);
+  border: none;
+  border-radius: 5px;
+  padding: 6px 10px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin: 4px;
+}

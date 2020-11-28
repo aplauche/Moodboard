@@ -22,6 +22,10 @@ function GlobalContextProvider(props) {
       isOpen: false,
       prepopulate: null,
     },
+    postModal: {
+      isOpen: false,
+      postId: null,
+    },
   };
 
   const reducer = (draft, action) => {
@@ -52,6 +56,14 @@ function GlobalContextProvider(props) {
       case "closePostFormModal":
         draft.postFormModal.prepopulate = null;
         draft.postFormModal.isOpen = false;
+        break;
+      case "openPostModal":
+        draft.postModal.postId = action.data;
+        draft.postModal.isOpen = true;
+        break;
+      case "closePostModal":
+        draft.postModal.postId = null;
+        draft.postModal.isOpen = false;
         break;
     }
   };

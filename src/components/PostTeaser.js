@@ -82,6 +82,15 @@ function PostTeaser({ postInfo, id }) {
       <div className="info">
         <p className="post-title">{postInfo.title}</p>
         <p className="username">{postInfo.createdBy}</p>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            appDispatch({ type: "openPostModal", data: id });
+          }}
+        >
+          View Post
+        </button>
       </div>
     </BoardDiv>
   );
