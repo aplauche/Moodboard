@@ -18,13 +18,14 @@ function SingleBoard() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const [owner, setOwner] = useState(null);
+  const [boardData, setBoardData] = useState(null);
 
   useEffect(() => {
     let unsubscribe = db
       .collection("boards")
       .doc(id)
       .collection("posts")
+      .orderBy("timestamp", "desc")
       .onSnapshot((snapshot) => {
         setPosts(
           snapshot.docs.map((doc) => {
@@ -40,9 +41,9 @@ function SingleBoard() {
       .doc(id)
       .get()
       .then((doc) => {
-        setOwner(doc.data().createdById);
+        setBoardData(doc.data());
+        setLoading(false);
       });
-    setLoading(false);
 
     return () => {
       unsubscribe();
@@ -56,7 +57,10 @@ function SingleBoard() {
   return (
     <div>
       <PostModal />
-      {owner == appState.user.uid && <Toolbar />}
+      <h1 style={{ marginBottom: "20px" }}>{boardData.title}</h1>
+      {boardData.createdById == appState.user.uid && (
+        <Toolbar boardName={boardData.title} />
+      )}
       <BoardsGrid>
         {posts.map((post) => {
           return <PostTeaser key={post.id} id={post.id} postInfo={post.data} />;

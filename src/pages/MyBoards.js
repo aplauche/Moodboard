@@ -7,6 +7,7 @@ import BoardFormModal from "../components/BoardFormModal";
 import { db } from "../firebase";
 
 import { Context } from "../store";
+import Loading from "../components/Loading";
 
 function MyBoards() {
   const { appState, appDispatch } = useContext(Context);
@@ -17,6 +18,7 @@ function MyBoards() {
   useEffect(() => {
     db.collection("boards")
       .where("createdById", "==", appState.user.uid)
+      .orderBy("timestamp", "desc")
       .onSnapshot((snapshot) => {
         setBoards(
           snapshot.docs.map((doc) => {
@@ -31,7 +33,7 @@ function MyBoards() {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   return (

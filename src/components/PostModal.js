@@ -62,6 +62,7 @@ function PostModal() {
 
   const handleClose = () => {
     appDispatch({ type: "closePostModal" });
+    setData(null);
     setLoading(true);
   };
 

@@ -20,7 +20,7 @@ const ToolbarDiv = styled("div")`
   }
 `;
 
-function Toolbar() {
+function Toolbar({ boardName }) {
   const { appState, appDispatch } = useContext(Context);
 
   return (
@@ -28,9 +28,7 @@ function Toolbar() {
       <PostFormModal />
       <ToolbarDiv>
         <div className="left">
-          <p>4 Columns</p>
-        </div>
-        <div className="right">
+          <p></p>
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -38,10 +36,26 @@ function Toolbar() {
               appDispatch({ type: "openPostFormModal" });
             }}
           >
-            Add
+            Add POST
           </button>
-          <button>Titles</button>
-          <button>Comments</button>
+        </div>
+        <div className="right">
+          <button
+            onClick={(e) => {
+              appDispatch({ type: "toggleTitles" });
+            }}
+          >
+            {appState.boardViewSettings.showTitles ? "Hide Info" : "Show Info"}
+          </button>
+          <button
+            onClick={(e) => {
+              appDispatch({ type: "toggleButtons" });
+            }}
+          >
+            {appState.boardViewSettings.showButtons
+              ? "Hide Controls"
+              : "Show Controls"}
+          </button>
           <button>DarkMode</button>
         </div>
       </ToolbarDiv>

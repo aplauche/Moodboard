@@ -10,12 +10,7 @@ const BoardDiv = styled("div")`
   box-shadow: 2px 2px 18px rgba(0, 0, 0, 0.2);
   position: relative;
   border-radius: 10px;
-
-  & button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-  }
+  cursor: pointer;
 
   & img {
     width: 100%;
@@ -24,11 +19,31 @@ const BoardDiv = styled("div")`
     border-radius: 10px;
   }
 
+  & .buttons {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: right;
+  }
+
   & .info {
     color: white;
     position: absolute;
-    bottom: 10px;
-    left: 10px;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+
+    background-image: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0),
+      rgba(0, 0, 0, 0.6),
+      rgba(0, 0, 0, 0.8)
+    );
   }
 
   & .post-title {
@@ -61,37 +76,39 @@ function PostTeaser({ postInfo, id }) {
   };
 
   return (
-    <BoardDiv>
-      <button
-        onClick={() => {
-          deletePost();
-        }}
-      >
-        Delete
-      </button>
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          e.preventDefault();
-          appDispatch({ type: "openPostFormModal", data: id });
-        }}
-      >
-        Edit
-      </button>
+    <BoardDiv
+      onClick={(e) => {
+        appDispatch({ type: "openPostModal", data: id });
+      }}
+    >
+      {appState.boardViewSettings.showButtons && (
+        <div className="buttons">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              appDispatch({ type: "openPostFormModal", data: id });
+            }}
+          >
+            Edit
+          </button>
+          <button
+            onClick={() => {
+              deletePost();
+            }}
+          >
+            Delete
+          </button>
+        </div>
+      )}
+
       <img src={postInfo.image} alt="" />
-      <div className="info">
-        <p className="post-title">{postInfo.title}</p>
-        <p className="username">{postInfo.createdBy}</p>
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            appDispatch({ type: "openPostModal", data: id });
-          }}
-        >
-          View Post
-        </button>
-      </div>
+      {appState.boardViewSettings.showTitles && (
+        <div className="info">
+          <p className="post-title">{postInfo.title}</p>
+          <p className="username">{postInfo.createdBy}</p>
+        </div>
+      )}
     </BoardDiv>
   );
 }

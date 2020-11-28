@@ -16,8 +16,10 @@ const CreateBoardForm = styled("div")`
   left: 50%;
   transform: translate(-50%, -50%);
   position: fixed;
-  max-width: 600px
   width: 90vw;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 32px;
 
   &:focus {
     outline: none;
@@ -27,7 +29,7 @@ const CreateBoardForm = styled("div")`
     margin-bottom: 20px;
   }
 
-  & form {
+  & .form {
     display: flex;
     flex-direction: column;
   }
@@ -136,9 +138,11 @@ function CreatePostModal() {
   return (
     <Modal open={appState.postFormModal.isOpen} onClose={handleClose}>
       <CreateBoardForm>
-        <h2>Create A Post</h2>
-        <form onSubmit={handleSubmit}>
+        <div>
+          <h2>Create A Post</h2>
           <ImageUpload currentImage={image} handleUpload={handleUpload} />
+        </div>
+        <div className="form">
           <label htmlFor="title">Title</label>
           <input
             required={true}
@@ -174,10 +178,10 @@ function CreatePostModal() {
             type="text"
           />
 
-          <button style={{ marginTop: "20px" }} type="submit">
+          <button onClick={handleSubmit} style={{ marginTop: "20px" }}>
             Submit
           </button>
-        </form>
+        </div>
       </CreateBoardForm>
     </Modal>
   );

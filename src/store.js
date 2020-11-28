@@ -14,6 +14,7 @@ function GlobalContextProvider(props) {
     flash: [],
     user: null,
     loadingUser: true,
+    loadingData: true,
     postFormModal: {
       isOpen: false,
       prepopulate: null,
@@ -26,6 +27,11 @@ function GlobalContextProvider(props) {
       isOpen: false,
       postId: null,
     },
+    boardViewSettings: {
+      showTitles: true,
+      showButtons: true,
+      darkMode: true,
+    },
   };
 
   const reducer = (draft, action) => {
@@ -37,6 +43,12 @@ function GlobalContextProvider(props) {
       case "logout":
         draft.user = null;
         draft.loadingUser = false;
+        break;
+      case "doneLoading":
+        draft.loadingData = false;
+        break;
+      case "resetLoading":
+        draft.loadingData = true;
         break;
       case "flash":
         draft.flash.push(action.value);
@@ -64,6 +76,17 @@ function GlobalContextProvider(props) {
       case "closePostModal":
         draft.postModal.postId = null;
         draft.postModal.isOpen = false;
+        break;
+      case "toggleTitles":
+        draft.boardViewSettings.showTitles = !draft.boardViewSettings
+          .showTitles;
+        break;
+      case "toggleButtons":
+        draft.boardViewSettings.showButtons = !draft.boardViewSettings
+          .showButtons;
+        break;
+      case "toggleDarkMode":
+        draft.boardViewSettings.darkMode = !draft.boardViewSettings.darkMode;
         break;
     }
   };
