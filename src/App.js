@@ -9,6 +9,7 @@ import { auth } from "./firebase";
 import MyBoards from "./pages/MyBoards";
 import Explore from "./pages/Explore";
 import SingleBoard from "./pages/SingleBoard";
+import Loading from "./components/Loading";
 
 function App() {
   const { appState, appDispatch } = useContext(Context);
@@ -36,9 +37,10 @@ function App() {
           justifyContent: "center",
           alignItems: "center",
           height: "100vh",
+          width: "100%",
         }}
       >
-        Loading...
+        <Loading />
       </div>
     );
   }

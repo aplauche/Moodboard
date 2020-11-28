@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import Loading from "./Loading";
 
 function ImageUpload({ currentImage, handleUpload }) {
   const [uploading, setUploading] = useState(false);
@@ -39,7 +40,7 @@ function ImageUpload({ currentImage, handleUpload }) {
     return (
       <>
         <label htmlFor="image-upload">Cover Photo</label>
-        Uploading...
+        <Loading />
       </>
     );
   }

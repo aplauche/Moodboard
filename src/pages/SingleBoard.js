@@ -7,6 +7,7 @@ import { db } from "../firebase";
 import BoardsGrid from "../components/BoardsGrid";
 import PostTeaser from "../components/PostTeaser";
 import { Context } from "../store";
+import Loading from "../components/Loading";
 
 function SingleBoard() {
   const { id } = useParams();
@@ -47,10 +48,8 @@ function SingleBoard() {
     };
   }, []);
 
-  useEffect(() => {}, []);
-
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   return (
