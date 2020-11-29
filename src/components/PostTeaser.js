@@ -35,14 +35,13 @@ const BoardDiv = styled("div")`
     bottom: 0px;
     left: 0px;
     width: 100%;
-    padding: 10px;
+    padding: 20px 10px 12px 10px;
     border-radius: 10px;
-
     background-image: linear-gradient(
       180deg,
       rgba(0, 0, 0, 0),
-      rgba(0, 0, 0, 0.6),
-      rgba(0, 0, 0, 0.8)
+      rgba(0, 0, 0, 0.3),
+      rgba(0, 0, 0, 0.6)
     );
   }
 

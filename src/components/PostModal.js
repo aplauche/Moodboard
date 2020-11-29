@@ -24,6 +24,8 @@ const PostView = styled("div")`
   & img {
     width: 100%;
     height: auto;
+    max-height: 70vh;
+    object-fit: contain;
   }
 
   & h2 {

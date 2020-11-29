@@ -10,25 +10,23 @@ const BoardDiv = styled(Link)`
   position: relative;
   color: #efefef;
   text-decoration: none;
-  background: #212529;
-  border-radius: 10px;
-
-  & button {
-    // position: absolute;
-    // top: 10px;
-    // right: 10px;
-  }
+  border-radius: 6px;
+  margin-bottom: 20px;
+  display: block;
 
   & img {
     width: 100%;
     height: 250px;
     object-fit: cover;
-    border-top-right-radius: 10px;
-    border-top-left-radius: 10px;
+    border-top-right-radius: 6px;
+    border-top-left-radius: 6px;
   }
 
   & .info {
-    padding: 20px 20px 40px 20px;
+    padding: 20px 20px 20px 20px;
+    background: #212529;
+    border-bottom-right-radius: 6px;
+    border-bottom-left-radius: 6px;
   }
 
   & .board-title {
