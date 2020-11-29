@@ -8,6 +8,12 @@ function ImageUpload({ currentImage, handleUpload }) {
 
   const fileInput = useRef();
 
+  const handleRemoveImage = () => {
+    if (mounted) {
+      handleUpload("");
+    }
+  };
+
   const handlePhotoSelected = (e) => {
     setUploading(true);
     let cloudURL = "https://api.Cloudinary.com/v1_1/fsdm/image/upload";
@@ -50,7 +56,7 @@ function ImageUpload({ currentImage, handleUpload }) {
       <label style={{ display: "block" }} htmlFor="image-upload">
         Cover Photo
       </label>
-      {image == "" ? (
+      {image == "" || image == null ? (
         <input
           id="image-upload"
           onChange={handlePhotoSelected}
@@ -58,7 +64,12 @@ function ImageUpload({ currentImage, handleUpload }) {
           type="file"
         />
       ) : (
-        <img src={image} alt="" />
+        <>
+          <img src={image} alt="" />
+          <button style={{ display: "block" }} onClick={handleRemoveImage}>
+            Remove Image
+          </button>
+        </>
       )}
     </>
   );

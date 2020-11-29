@@ -24,7 +24,7 @@ code {
 
 button,
 .button {
-  color: white;
+  color: #333;
   text-decoration: none;
   text-transform: uppercase;
   background: linear-gradient(45deg, #e0c3fc, #8ec5fc);

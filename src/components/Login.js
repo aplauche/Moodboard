@@ -16,7 +16,8 @@ const LoginModal = styled("div")`
   & h2 {
     display: block;
     text-align: center;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
+    color: #333;
   }
 `;
 
@@ -31,6 +32,7 @@ const StyledForm = styled("form")`
 
   & button {
     margin-top: 16px;
+    width: 100%;
   }
 `;
 

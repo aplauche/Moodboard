@@ -90,14 +90,25 @@ function Board({ boardInfo, id }) {
   return (
     <BoardDiv>
       <Link to={"/boards/" + id}>
-        <img className="cover-image" src={boardInfo.image} alt="" />
+        {boardInfo.image != "" ? (
+          <img className="cover-image" src={boardInfo.image} alt="" />
+        ) : (
+          <img className="cover-image" src={`/moodboard-home-bg.jpg`} alt="" />
+        )}
       </Link>
       <div className="info">
         <Link to={"/boards/" + id}>
           <p className="board-title">{boardInfo.title}</p>
         </Link>
         <Link className="profile-info" to={`/profile/${profileInfo?.uid}`}>
-          <img src={profileInfo?.profilePic} alt="" />
+          <img
+            src={
+              profileInfo?.profilePic
+                ? profileInfo?.profilePic
+                : "/moodboard-home-bg.jpg"
+            }
+            alt=""
+          />
           <p>{profileInfo?.displayName}</p>
         </Link>
         {boardInfo.createdById == appState.user.uid && (

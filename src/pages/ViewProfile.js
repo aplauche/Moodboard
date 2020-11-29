@@ -20,7 +20,7 @@ const ProfileHeader = styled("div")`
   & img {
     width: 150px;
     height: 150px;
-    object-fit: contain;
+    object-fit: cover;
     border-radius: 75px;
   }
 
@@ -71,7 +71,14 @@ function ViewProfile() {
   return (
     <>
       <ProfileHeader>
-        <img src={profileInfo?.profilePic} alt="" />
+        <img
+          src={
+            profileInfo?.profilePic
+              ? profileInfo?.profilePic
+              : "/moodboard-home-bg.jpg"
+          }
+          alt=""
+        />
         <div>
           <h1>{profileInfo?.displayName}</h1>
           <p>{profileInfo?.bio}</p>

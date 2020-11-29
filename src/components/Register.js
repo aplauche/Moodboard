@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import Modal from "@material-ui/core/Modal";
 import Button from "@material-ui/core/Button";
 import Input from "@material-ui/core/Input";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
 import { Context } from "../store";
 import styled from "@emotion/styled";
 
@@ -16,7 +16,8 @@ const LoginModal = styled("div")`
   & h2 {
     display: block;
     text-align: center;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
+    color: #333;
   }
 `;
 
@@ -31,6 +32,7 @@ const StyledForm = styled("form")`
 
   & button {
     margin-top: 16px;
+    width: 100%;
   }
 `;
 
@@ -45,6 +47,11 @@ function Register() {
     auth
       .createUserWithEmailAndPassword(email, password)
       .then((authUser) => {
+        console.log(authUser);
+        db.collection("users").add({
+          displayName: username,
+          uid: authUser.user.uid,
+        });
         return authUser.user.updateProfile({
           displayName: username,
         });
@@ -58,17 +65,18 @@ function Register() {
         <h2>Register</h2>
         <StyledForm>
           <Input
-            placeholder="email"
-            type="text"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <Input
             placeholder="username"
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
+          <Input
+            placeholder="email"
+            type="text"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+
           <Input
             placeholder="password"
             type="password"

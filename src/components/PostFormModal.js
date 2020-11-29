@@ -47,7 +47,7 @@ const CreateBoardForm = styled("div")`
 
   & img {
     max-width: 100%;
-    width: 200px;
+    width: 300px;
     height: 200px;
     object-fit: cover;
     margin-bottom: 20px;
