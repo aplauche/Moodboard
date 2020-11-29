@@ -1,10 +1,10 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
 import { db } from "../firebase";
 import { Context } from "../store";
 
-const BoardDiv = styled(Link)`
+const BoardDiv = styled("div")`
   width: 100%;
   box-shadow: 2px 2px 18px rgba(0, 0, 0, 0.2);
   position: relative;
@@ -14,12 +14,32 @@ const BoardDiv = styled(Link)`
   margin-bottom: 20px;
   display: block;
 
-  & img {
+  & a {
+    color: white;
+    text-decoration: none;
+  }
+
+  & .cover-image {
     width: 100%;
     height: 250px;
     object-fit: cover;
     border-top-right-radius: 6px;
     border-top-left-radius: 6px;
+  }
+
+  & .profile-info {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 20px;
+
+    & img {
+      width: 40px;
+      height: 40px;
+      object-fit: cover;
+      border-radius: 20px;
+      margin-right: 12px;
+    }
   }
 
   & .info {
@@ -32,18 +52,14 @@ const BoardDiv = styled(Link)`
   & .board-title {
     font-size: 1.4rem;
     font-family: "Playfair Display", serif;
-    margin-bottom: 10px;
-  }
-
-  & .username {
-    font-size: 0.75rem;
-    font-weight: 700;
-    margin-bottom: 32px;
+    margin-bottom: 20px;
   }
 `;
 
 function Board({ boardInfo, id }) {
   const { appState, appDispatch } = useContext(Context);
+
+  const [profileInfo, setProfileInfo] = useState(null);
 
   const deleteBoard = (id) => {
     db.collection("boards")
@@ -57,12 +73,33 @@ function Board({ boardInfo, id }) {
       });
   };
 
+  useEffect(() => {
+    const getProfileData = async () => {
+      const snapshot = await db
+        .collection("users")
+        .where("uid", "==", boardInfo.createdById)
+        .get();
+      if (!snapshot.empty) {
+        const data = snapshot.docs[0].data();
+        setProfileInfo(data);
+      }
+    };
+    getProfileData();
+  }, []);
+
   return (
-    <BoardDiv to={"/boards/" + id}>
-      <img src={boardInfo.image} alt="" />
+    <BoardDiv>
+      <Link to={"/boards/" + id}>
+        <img className="cover-image" src={boardInfo.image} alt="" />
+      </Link>
       <div className="info">
-        <p className="board-title">{boardInfo.title}</p>
-        <p className="username">{boardInfo.createdBy}</p>
+        <Link to={"/boards/" + id}>
+          <p className="board-title">{boardInfo.title}</p>
+        </Link>
+        <Link className="profile-info" to={`/profile/${profileInfo?.uid}`}>
+          <img src={profileInfo?.profilePic} alt="" />
+          <p>{profileInfo?.displayName}</p>
+        </Link>
         {boardInfo.createdById == appState.user.uid && (
           <>
             <button
