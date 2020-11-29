@@ -18,8 +18,10 @@ const CreateBoardForm = styled("div")`
   left: 50%;
   transform: translate(-50%, -50%);
   position: fixed;
-  max-width: 600px;
   width: 90vw;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
 
   &:focus {
     outline: none;
@@ -29,7 +31,7 @@ const CreateBoardForm = styled("div")`
     margin-bottom: 20px;
   }
 
-  & form {
+  & .form {
     display: flex;
     flex-direction: column;
   }
@@ -138,9 +140,12 @@ function CreateBoardModal() {
   return (
     <Modal open={appState.boardFormModal.isOpen} onClose={handleClose}>
       <CreateBoardForm>
-        <h2>{editMode ? "Edit Board" : "Create Board"}</h2>
-        <form onSubmit={handleSubmit}>
+        <div>
+          <h2>{editMode ? "Edit Board" : "Create Board"}</h2>
           <ImageUpload currentImage={image} handleUpload={handleUpload} />
+        </div>
+
+        <div className="form">
           <label htmlFor="title">Board Name:</label>
           <input
             required={true}
@@ -172,7 +177,7 @@ function CreateBoardModal() {
               setTagInput(e.target.value);
             }}
             onKeyDown={(e) => {
-              if (e.keyCode == 188) {
+              if (e.keyCode == 188 || e.keyCode == 13) {
                 e.preventDefault();
                 setTags([...tags, e.target.value]);
                 setTagInput("");
@@ -213,15 +218,23 @@ function CreateBoardModal() {
           </FormGroup>
 
           {editMode ? (
-            <button style={{ marginTop: "20px" }} type="submit">
+            <button
+              onClick={handleSubmit}
+              style={{ marginTop: "20px" }}
+              type="submit"
+            >
               Update Board
             </button>
           ) : (
-            <button style={{ marginTop: "20px" }} type="submit">
+            <button
+              onClick={handleSubmit}
+              style={{ marginTop: "20px" }}
+              type="submit"
+            >
               Create Board
             </button>
           )}
-        </form>
+        </div>
       </CreateBoardForm>
     </Modal>
   );
