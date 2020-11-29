@@ -10,6 +10,8 @@ import MyBoards from "./pages/MyBoards";
 import Explore from "./pages/Explore";
 import SingleBoard from "./pages/SingleBoard";
 import Loading from "./components/Loading";
+import EditProfile from "./pages/EditProfile";
+import ViewProfile from "./pages/ViewProfile";
 
 function App() {
   const { appState, appDispatch } = useContext(Context);
@@ -67,6 +69,12 @@ function App() {
           </Route>
           <Route path="/boards/:id">
             <SingleBoard />
+          </Route>
+          <Route exact path="/profile/edit/:id">
+            <EditProfile />
+          </Route>
+          <Route exact path="/profile/:id">
+            <ViewProfile />
           </Route>
           <Route path="/explore">
             <Explore />

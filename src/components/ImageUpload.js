@@ -47,7 +47,9 @@ function ImageUpload({ currentImage, handleUpload }) {
 
   return (
     <>
-      <label htmlFor="image-upload">Cover Photo</label>
+      <label style={{ display: "block" }} htmlFor="image-upload">
+        Cover Photo
+      </label>
       {image == "" ? (
         <input
           id="image-upload"
