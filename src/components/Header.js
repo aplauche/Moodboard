@@ -57,9 +57,7 @@ function Header() {
             <NavLink to="/explore">Explore</NavLink>
 
             <NavLink to="/boards">My Boards</NavLink>
-            <NavLink to={`/profile/edit/${appState.user.uid}`}>
-              My Profile
-            </NavLink>
+            <NavLink to={`/profile/${appState.user.uid}`}>My Profile</NavLink>
             <Button style={{ color: "white" }} onClick={handleSignOut}>
               Sign Out
             </Button>

@@ -34,11 +34,14 @@ function Explore() {
   }
 
   return (
-    <BoardsGrid>
-      {boards.map((board) => {
-        return <Board key={board.id} id={board.id} boardInfo={board.data} />;
-      })}
-    </BoardsGrid>
+    <>
+      <h1 style={{ marginBottom: "50px" }}>Recently Posted Boards</h1>
+      <BoardsGrid>
+        {boards.map((board) => {
+          return <Board key={board.id} id={board.id} boardInfo={board.data} />;
+        })}
+      </BoardsGrid>
+    </>
   );
 }
 

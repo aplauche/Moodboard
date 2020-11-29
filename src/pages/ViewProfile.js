@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import styled from "@emotion/styled";
 import { db } from "../firebase";
 
@@ -11,12 +11,11 @@ import BoardsGrid from "../components/BoardsGrid";
 const ProfileHeader = styled("div")`
   width: 100%;
   max-width: 600px;
-  margin: 0px auto 50px auto;
+  margin: 0px 0px 50px 0px;
   padding-bottom: 32px;
   display: grid;
   grid-template-columns: 1fr 2fr;
   gap: 50px;
-  border-bottom: 1px solid white;
 
   & img {
     width: 150px;
@@ -55,6 +54,7 @@ function ViewProfile() {
   useEffect(() => {
     db.collection("boards")
       .where("createdById", "==", params.id)
+      .where("isPublic", "==", true)
       .orderBy("timestamp", "desc")
       .onSnapshot((snapshot) => {
         setBoards(
@@ -76,8 +76,13 @@ function ViewProfile() {
           <h1>{profileInfo?.displayName}</h1>
           <p>{profileInfo?.bio}</p>
           <a className="button" href={profileInfo?.website} target="_blank">
-            View Website
+            View Portfolio Website
           </a>
+          {appState.user.uid == params.id && (
+            <Link className="button" to={`/profile/edit/${params.id}`}>
+              Edit Profile
+            </Link>
+          )}
         </div>
       </ProfileHeader>
       <BoardsGrid>

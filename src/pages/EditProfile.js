@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 
 import styled from "@emotion/styled";
 import ImageUpload from "../components/ImageUpload";
+import { useHistory } from "react-router-dom";
 import { db } from "../firebase";
 import firebase from "firebase";
 import { Context } from "../store";
@@ -47,6 +48,8 @@ const EditProfileForm = styled("div")`
 function EditProfile() {
   const { appState, appDispatch } = useContext(Context);
 
+  const history = useHistory();
+
   const [displayName, setDisplayName] = useState("");
   const [website, setWebsite] = useState("");
   const [bio, setBio] = useState("");
@@ -90,6 +93,7 @@ function EditProfile() {
         uid: appState.user.uid,
       });
     }
+    history.push(`/profile/${appState.user.uid}`);
   };
 
   const handleUpload = (image) => {
