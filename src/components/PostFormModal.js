@@ -17,8 +17,9 @@ const CreateBoardForm = styled("div")`
   transform: translate(-50%, -50%);
   position: fixed;
   width: 90vw;
+  max-width: 800px;
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 32px;
 
   &:focus {

@@ -56,7 +56,7 @@ function Toolbar({ boardName }) {
               ? "Hide Controls"
               : "Show Controls"}
           </button>
-          <button>DarkMode</button>
+          {/* <button>DarkMode</button> */}
         </div>
       </ToolbarDiv>
     </>

@@ -17,7 +17,8 @@ function SingleBoard() {
 
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const [paginationCount, setPaginationCount] = useState(9);
+  const [latestDoc, setLatestDoc] = useState(null);
   const [boardData, setBoardData] = useState(null);
 
   useEffect(() => {
@@ -26,6 +27,7 @@ function SingleBoard() {
       .doc(id)
       .collection("posts")
       .orderBy("timestamp", "desc")
+      .limit(paginationCount)
       .onSnapshot((snapshot) => {
         setPosts(
           snapshot.docs.map((doc) => {
@@ -35,6 +37,7 @@ function SingleBoard() {
             };
           })
         );
+        setLatestDoc(snapshot.docs[paginationCount - 1]);
       });
 
     db.collection("boards")
@@ -43,12 +46,34 @@ function SingleBoard() {
       .then((doc) => {
         setBoardData(doc.data());
         setLoading(false);
+        console.log(boardData);
       });
 
     return () => {
       unsubscribe();
     };
   }, []);
+
+  const loadMore = () => {
+    db.collection("boards")
+      .doc(id)
+      .collection("posts")
+      .orderBy("timestamp", "desc")
+      .startAfter(latestDoc || 0)
+      .limit(paginationCount)
+      .onSnapshot((snapshot) => {
+        setPosts((prev) => {
+          const newArray = snapshot.docs.map((doc) => {
+            return {
+              id: doc.id,
+              data: doc.data(),
+            };
+          });
+          return [...prev, ...newArray];
+        });
+        setLatestDoc(snapshot.docs[paginationCount - 1]);
+      });
+  };
 
   if (loading) {
     return <Loading />;
@@ -66,6 +91,14 @@ function SingleBoard() {
           return <PostTeaser key={post.id} id={post.id} postInfo={post.data} />;
         })}
       </BoardsGrid>
+      {latestDoc != null && (
+        <button
+          style={{ margin: "20px auto", display: "block" }}
+          onClick={loadMore}
+        >
+          Load More
+        </button>
+      )}
     </div>
   );
 }

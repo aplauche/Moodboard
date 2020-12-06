@@ -1,5 +1,18 @@
 import React, { useEffect, useState, useRef } from "react";
 import Loading from "./Loading";
+import styled from "@emotion/styled";
+
+const CustomUpload = styled("label")`
+  width: 100%;
+  color: #e0c3fc;
+  border: 1px dashed #e0c3fc;
+  display: flex;
+  height: 100px;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-weight: 700;
+`;
 
 function ImageUpload({ currentImage, handleUpload }) {
   const [uploading, setUploading] = useState(false);
@@ -53,16 +66,17 @@ function ImageUpload({ currentImage, handleUpload }) {
 
   return (
     <>
-      <label style={{ display: "block" }} htmlFor="image-upload">
-        Cover Photo
-      </label>
       {image == "" || image == null ? (
-        <input
-          id="image-upload"
-          onChange={handlePhotoSelected}
-          ref={fileInput}
-          type="file"
-        />
+        <>
+          <CustomUpload htmlFor="image-upload">+ Add Cover Photo</CustomUpload>
+          <input
+            style={{ display: "none" }}
+            id="image-upload"
+            onChange={handlePhotoSelected}
+            ref={fileInput}
+            type="file"
+          />
+        </>
       ) : (
         <>
           <img src={image} alt="" />
