@@ -1,9 +1,17 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Login from "../components/Login";
 import Register from "../components/Register";
 import styled from "@emotion/styled";
+import { current } from "immer";
+import ForgotPassword from "../components/forgotPassword";
 
 function HomeLoggedOut() {
+  const [currentModal, setCurrentModal] = useState("register");
+
+  const handleToggle = (modal) => {
+    setCurrentModal(modal);
+  };
+
   return (
     <>
       <div
@@ -16,8 +24,11 @@ function HomeLoggedOut() {
           paddingTop: "10vh",
         }}
       >
-        <Login />
-        <Register />
+        {currentModal == "login" && <Login handleToggle={handleToggle} />}
+        {currentModal == "register" && <Register handleToggle={handleToggle} />}
+        {currentModal == "forgot" && (
+          <ForgotPassword handleToggle={handleToggle} />
+        )}
       </div>
     </>
   );

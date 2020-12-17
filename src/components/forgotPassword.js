@@ -50,59 +50,53 @@ const StyledForm = styled("form")`
   }
 `;
 
-function Login({ handleToggle }) {
+function ForgotPassword({ handleToggle }) {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [sentMessage, setSentMessage] = useState("");
+  const [sent, setSent] = useState(false);
 
   const { appState, appDispatch } = useContext(Context);
 
   // sign up through firebase
-  const signIn = (event) => {
+  const resetPassword = (event) => {
     event.preventDefault();
-    auth.signInWithEmailAndPassword(email, password).catch((err) => {
-      alert(err.message);
-    });
+    auth
+      .sendPasswordResetEmail(email)
+      .then(() => {
+        setSent(true);
+      })
+      .catch((err) => {
+        alert(err.message);
+      });
   };
 
   return (
     <>
       <LoginModal>
-        <h2>Login</h2>
-        <StyledForm>
-          <Input
-            placeholder="email"
-            type="text"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <Input
-            placeholder="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <Button onClick={signIn}>Sign In</Button>
-        </StyledForm>
+        <h2>Reset Password</h2>
+        {sent ? (
+          <p>An email with a reset link has been sent.</p>
+        ) : (
+          <StyledForm>
+            <Input
+              placeholder="email"
+              type="text"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <Button onClick={resetPassword}>Send Email</Button>
+          </StyledForm>
+        )}
+
         <p>
-          No Account yet?
+          Return to Login
           <span
             className="alt-link"
             onClick={() => {
-              handleToggle("register");
+              handleToggle("login");
             }}
           >
-            Sign Up!
-          </span>
-        </p>
-        <p>
-          Forgot Your Password?
-          <span
-            className="alt-link"
-            onClick={() => {
-              handleToggle("forgot");
-            }}
-          >
-            Reset Password
+            Login
           </span>
         </p>
       </LoginModal>
@@ -110,4 +104,4 @@ function Login({ handleToggle }) {
   );
 }
 
-export default Login;
+export default ForgotPassword;

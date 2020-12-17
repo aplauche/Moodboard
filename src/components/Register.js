@@ -7,7 +7,7 @@ import { Context } from "../store";
 import styled from "@emotion/styled";
 
 const LoginModal = styled("div")`
-  padding: 40px;
+  padding: 40px 40px 20px 40px;
   box-shadow: 2px 4px 18px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
   background: white;
@@ -18,6 +18,19 @@ const LoginModal = styled("div")`
     text-align: center;
     margin-bottom: 20px;
     color: #333;
+  }
+
+  & p {
+    color: #666;
+    display: block;
+    margin: 20px 0px;
+  }
+
+  & .alt-link {
+    display: block;
+    cursor: pointer;
+    text-align: center;
+    color: #8ec5fc;
   }
 `;
 
@@ -36,7 +49,7 @@ const StyledForm = styled("form")`
   }
 `;
 
-function Register() {
+function Register({ handleToggle }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
@@ -85,6 +98,17 @@ function Register() {
           />
           <Button onClick={signUp}>Sign Up</Button>
         </StyledForm>
+        <p>
+          Already have an account?
+          <span
+            className="alt-link"
+            onClick={() => {
+              handleToggle("login");
+            }}
+          >
+            Sign In
+          </span>
+        </p>
       </LoginModal>
     </>
   );
